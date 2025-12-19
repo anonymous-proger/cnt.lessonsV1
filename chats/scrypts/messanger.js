@@ -7,7 +7,7 @@ function alerts() {
 
 
 function handleHeaderClick() {
-    alert("chatMessanger v1.0");
+    alert("chatMessanger v1.1");
 }
 
 function initChat() {
@@ -15,10 +15,7 @@ function initChat() {
     
     chatItems.forEach((item, index) => {
         item.addEventListener('click', function() {
-            const chatName = this.querySelector('.chat-name').textContent;
-            
-            alert(`Вы выбрали чат с: ${chatName}\n\n` +
-                  'Чат будет доступен спустя обновление, спасибо за ожидание :)');
+            const chatName = this.querySelector('.chat-name').textContent;  
         });
     });
 }
