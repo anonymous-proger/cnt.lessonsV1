@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="/chats/styles/chatStyles.css">
     <script src="/chats/scrypts/messanger.js"></script>
     <script src="/chats/scrypts/chat-function.js"></script>
+    <script src="/chats/scrypts/sendLogic.js"></script>
 </head>
 <body>
     <div class="messenger-container">
-
         <header class="top-header" id="header">
             <div class="logo">
                 <img id="loggo" src="/chats/img/logo.png" alt="" class="logo2" width="35px" height="35px">
@@ -19,9 +19,7 @@
             </div>
         </header>
         
-
         <main class="main-content">
-
             <aside class="chats-panel">
                 <div class="chats-list">
                     <div class="chat-item" data-chat-id="1" data-user-name="_User_" data-user-status="online" data-user-avatar="/chats/img/image.png">
@@ -90,12 +88,20 @@
                     </div>
                     
                     <div class="message-input-container">
-                        <textarea 
-                            id="message-input" 
-                            class="message-input" 
-                            placeholder="Введите сообщение..."
-                            rows="1"
-                        ></textarea>
+                        <div class="input-wrapper">
+                            <textarea 
+                                id="message-input" 
+                                class="message-input" 
+                                placeholder="Введите сообщение..."
+                                rows="1"
+                            ></textarea>
+                            <button class="send-button" id="send-button">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
