@@ -38,7 +38,14 @@ function initSendLogic() {
                 'АХАХ',
                 '🤡',
                 'Сам такой',
-                '😎'
+                '😎',
+                'Как дела',
+                'Умно',
+                'Приятно знать, но тем неменее',
+                'Извини, но нет',
+                'Нет',
+                'Да',
+                'Взаимно'
             ];
             const randomResponse = responses[Math.floor(Math.random() * responses.length)];
             const responseElement = createMessageElement(randomResponse, false);
