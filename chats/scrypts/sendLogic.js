@@ -1,13 +1,12 @@
-
 function initSendLogic() {
     const messageInput = document.getElementById('message-input');
     const sendButton = document.getElementById('send-button');
     const messagesContainer = document.getElementById('messages-container');
     
-    if (!messageInput || !sendButton || !messagesContainer) {
-        return;
-    }
-  
+    
+    const userAvatar = '/chats/img/image.png'; 
+    const otherAvatar = '/chats/img/image.png'; 
+    
     function sendMessage() {
         const messageText = messageInput.value.trim();
         
@@ -15,48 +14,51 @@ function initSendLogic() {
             return;
         }
         
-        const messageElement = createMessageElement(messageText, true);
+        removeNoMessagesText();
+        
+        const messageElement = createMessageElement(messageText, true, userAvatar);
         
         messagesContainer.appendChild(messageElement);
-
+        
         messageInput.value = '';
         messageInput.style.height = 'auto';
         
-
         scrollToBottom();
         
         setTimeout(() => {
             const responses = [
-                'ок',
+                'Хорошо!',
                 'Понял',
                 'Интересно',
                 'Спасибо за информацию',
                 'Обсудим позже',
-                'Согласен',
-                'Все в порядке?',
-                'Забавно',
-                'АХАХ',
-                '🤡',
-                'Сам такой',
-                '😎',
-                'Как дела',
-                'Умно',
-                'Приятно знать, но тем неменее',
-                'Извини, но нет',
-                'Нет',
-                'Да',
-                'Взаимно'
+                'Согласен'
             ];
             const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-            const responseElement = createMessageElement(randomResponse, false);
+            const responseElement = createMessageElement(randomResponse, false, otherAvatar);
             messagesContainer.appendChild(responseElement);
             scrollToBottom();
         }, 1000 + Math.random() * 1000);
     }
     
-    function createMessageElement(text, isOwn) {
+    function createMessageElement(text, isOwn, avatarUrl) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isOwn ? 'own-message' : 'other-message'}`;
+        
+        const avatarDiv = document.createElement('div');
+        avatarDiv.className = 'message-avatar';
+        
+        const avatarImg = document.createElement('img');
+        avatarImg.src = avatarUrl;
+        avatarImg.alt = isOwn ? 'Ваш аватар' : 'Аватар собеседника';
+        
+        avatarDiv.appendChild(avatarImg);
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        
+        const textContainerDiv = document.createElement('div');
+        textContainerDiv.className = 'message-text-container';
         
         const messageText = document.createElement('div');
         messageText.className = 'message-text';
@@ -70,8 +72,13 @@ function initSendLogic() {
         const minutes = now.getMinutes().toString().padStart(2, '0');
         messageTime.textContent = `${hours}:${minutes}`;
         
-        messageDiv.appendChild(messageText);
-        messageDiv.appendChild(messageTime);
+        textContainerDiv.appendChild(messageText);
+        textContainerDiv.appendChild(messageTime);
+        
+        contentDiv.appendChild(textContainerDiv);
+        
+        messageDiv.appendChild(avatarDiv);
+        messageDiv.appendChild(contentDiv);
         
         return messageDiv;
     }
@@ -80,6 +87,13 @@ function initSendLogic() {
         setTimeout(() => {
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }, 50);
+    }
+    
+    function removeNoMessagesText() {
+        const noMessagesText = messagesContainer.querySelector('.no-messages-text');
+        if (noMessagesText) {
+            noMessagesText.remove();
+        }
     }
     
     messageInput.addEventListener('input', function() {
@@ -112,7 +126,6 @@ function initSendLogic() {
     
     sendButton.addEventListener('click', sendMessage);
     
-
     const chatItems = document.querySelectorAll('.chat-item');
     if (chatItems.length) {
         document.addEventListener('click', function(e) {
@@ -126,9 +139,9 @@ function initSendLogic() {
         });
     }
     
+   
 }
 
-// Ждем полной загрузки DOM
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initSendLogic);
 } else {

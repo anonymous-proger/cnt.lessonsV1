@@ -1,50 +1,42 @@
-
 function initDeleteMessage() {
 
-    const messagesContainer = document.getElementById('messages-container');
-    
+    const messagesContainer = document.getElementById('messages-container');  
     const deleteButtonsState = new WeakMap();
     
- 
+  
     messagesContainer.addEventListener('click', handleMessageClick);
-    
  
     function handleMessageClick(event) {
         const messageElement = event.target.closest('.message');
         
         if (!messageElement) return;
-  
+        
         if (event.target.closest('.delete-button')) {
             return; 
         }
         
+
         if (messageElement.classList.contains('deleted')) {
             hideDeleteButton(messageElement);
             return;
         }
-    
+        
         toggleDeleteButton(messageElement);
     }
     
-
     function toggleDeleteButton(messageElement) {
-    
         const existingButton = messageElement.querySelector('.delete-button');
         
         if (existingButton) {
-      
             hideDeleteButton(messageElement);
         } else {
-        
             showDeleteButton(messageElement);
         }
     }
     
     function showDeleteButton(messageElement) {
-     
         hideAllDeleteButtons();
         
-
         const deleteButton = document.createElement('button');
         deleteButton.className = 'delete-button';
         deleteButton.innerHTML = `
@@ -56,7 +48,6 @@ function initDeleteMessage() {
             </svg>
         `;
         
-
         deleteButton.addEventListener('click', function(e) {
             e.stopPropagation(); 
             deleteMessage(messageElement);
@@ -64,9 +55,8 @@ function initDeleteMessage() {
         
 
         messageElement.appendChild(deleteButton);
-        
+
         deleteButtonsState.set(messageElement, true);
-        
 
         messageElement.classList.add('has-delete-button');
     }
@@ -99,7 +89,7 @@ function initDeleteMessage() {
         if (!messageElement || messageElement.classList.contains('deleted')) {
             return;
         }
- 
+
         messageElement.classList.add('deleted');
         
 
@@ -113,51 +103,56 @@ function initDeleteMessage() {
         setTimeout(() => {
             messageElement.remove();
             
-
             const remainingMessages = messagesContainer.querySelectorAll('.message:not(.message-date)');
             if (remainingMessages.length === 0) {
-
-                const noMessagesText = document.createElement('div');
-                noMessagesText.className = 'no-messages-text';
-                noMessagesText.textContent = 'Сообщений нет';
-                noMessagesText.style.textAlign = 'center';
-                noMessagesText.style.color = '#888';
-                noMessagesText.style.padding = '20px';
-                
- 
-                const dateElement = messagesContainer.querySelector('.message-date');
-                if (dateElement) {
-                    dateElement.insertAdjacentElement('afterend', noMessagesText);
-                }
+                showNoMessagesText();
             }
         }, 300); 
     }
     
-
+    function showNoMessagesText() {
+        const existingText = messagesContainer.querySelector('.no-messages-text');
+        if (existingText) return;
+        
+        const noMessagesText = document.createElement('div');
+        noMessagesText.className = 'no-messages-text';
+        noMessagesText.textContent = 'Сообщений нет';
+        
+        const dateElement = messagesContainer.querySelector('.message-date');
+        if (dateElement) {
+            dateElement.insertAdjacentElement('afterend', noMessagesText);
+        } else {
+            messagesContainer.appendChild(noMessagesText);
+        }
+    }
+    
+    function removeNoMessagesText() {
+        const noMessagesText = messagesContainer.querySelector('.no-messages-text');
+        if (noMessagesText) {
+            noMessagesText.remove();
+        }
+    }
+    
     document.addEventListener('click', function(event) {
-
         if (!event.target.closest('.message') && !event.target.closest('.delete-button')) {
             hideAllDeleteButtons();
         }
     });
     
-
     const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
             if (mutation.type === 'childList') {
-
                 mutation.addedNodes.forEach(function(node) {
                     if (node.nodeType === 1 && node.classList && node.classList.contains('message')) {
-
+                        removeNoMessagesText();
                     }
                 });
             }
         });
     });
     
-
     observer.observe(messagesContainer, { childList: true });
-
+    
 }
 
 if (document.readyState === 'loading') {
