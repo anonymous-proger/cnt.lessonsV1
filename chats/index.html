@@ -6,10 +6,12 @@
     <title>ChatMessage - Мессенджер</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="/chats/styles/chatStyles.css">
+    <link rel="stylesheet" href="/chats/styles/profileStyles.css">
     <script src="/chats/scrypts/messanger.js"></script>
     <script src="/chats/scrypts/chat-function.js"></script>
     <script src="/chats/scrypts/sendLogic.js"></script>
     <script src="/chats/scrypts/deleteMessage.js"></script>
+    <script src="/chats/scrypts/userBio.js"></script>
 </head>
 <body>
     <div class="messenger-container">
@@ -17,6 +19,14 @@
             <div class="logo">
                 <img id="loggo" src="/chats/img/logo.png" alt="" class="logo2" width="35px" height="35px">
                 chatMessage
+            </div>
+            <div class="header-actions">
+                <button class="profile-button" id="profile-button" title="Личный кабинет">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M20 21C20 19.6044 19.6478 18.2337 18.9763 17.0225C18.3049 15.8113 17.3385 14.8007 16.1732 14.0865C15.0079 13.3723 13.6849 12.978 12.3333 12.942C10.9818 12.9059 9.64833 13.2301 8.45561 13.8828C7.2629 14.5355 6.25257 15.4945 5.52786 16.6624C4.80315 17.8304 4.38873 19.1657 4.32149 20.5415C4.25425 21.9173 4.53643 23.2846 5.14015 24.5225C5.74387 25.7603 6.64966 26.8269 7.77128 27.6215C8.8929 28.4161 10.1928 28.9126 11.5556 29.064C12.9183 29.2154 14.2988 29.0168 15.5656 28.4863C16.8325 27.9559 17.9428 27.1099 18.7939 26.0267C19.645 24.9435 20.2099 23.6588 20.436 22.2933" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
             </div>
         </header>
         
@@ -102,6 +112,74 @@
                                     <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Контейнер профиля (изначально скрыт) -->
+                <div class="profile-container" id="profile-container" style="display: none;">
+                    <div class="profile-content">
+                        <div class="profile-header">
+                            <h2>Личный кабинет</h2>
+                            <button class="close-profile" id="close-profile">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div class="profile-info">
+                            <div class="profile-avatar-container">
+                                <div class="profile-avatar">
+                                    <img src="/chats/img/image.png" alt="Аватар пользователя">
+                                    <div class="avatar-frame"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="profile-details">
+                                <div class="profile-field">
+                                    <label for="profile-nickname">Никнейм</label>
+                                    <div class="profile-value" id="profile-nickname">chatUser_123</div>
+                                </div>
+                                
+                                <div class="profile-field">
+                                    <label for="profile-phone">Номер телефона</label>
+                                    <div class="profile-value" id="profile-phone">+7 (999) 123-45-67</div>
+                                </div>
+                                
+                                <div class="profile-field">
+                                    <label for="profile-status">Статус</label>
+                                    <div class="profile-value" id="profile-status">
+                                        <span class="status-indicator online"></span>
+                                        В сети
+                                    </div>
+                                </div>
+                                
+                                <div class="profile-field">
+                                    <label for="profile-joined">Дата регистрации</label>
+                                    <div class="profile-value" id="profile-joined">15.01.2024</div>
+                                </div>
+                            </div>
+                            
+                            <div class="profile-actions">
+                                <button class="profile-action-btn" id="edit-profile">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M18.5 2.5C18.8978 2.10217 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10217 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10217 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Редактировать профиль
+                                </button>
+                                
+                                <button class="profile-action-btn secondary" id="logout">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Выйти
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
