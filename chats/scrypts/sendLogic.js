@@ -1,11 +1,8 @@
 function initSendLogic() {
     const messageInput = document.getElementById('message-input');
     const sendButton = document.getElementById('send-button');
-    const messagesContainer = document.getElementById('messages-container');
-    
-    
-    const userAvatar = '/chats/img/image.png'; 
-    const otherAvatar = '/chats/img/image.png'; 
+    const messagesContainer = document.getElementById('messages-container');  
+    const userAvatar = '/chats/img/image.png';
     
     function sendMessage() {
         const messageText = messageInput.value.trim();
@@ -15,6 +12,9 @@ function initSendLogic() {
         }
         
         removeNoMessagesText();
+        
+        const chatUserAvatar = document.getElementById('chat-user-avatar');
+        const otherAvatar = chatUserAvatar ? chatUserAvatar.src : '/chats/img/image.png';
         
         const messageElement = createMessageElement(messageText, true, userAvatar);
         
@@ -109,8 +109,7 @@ function initSendLogic() {
         for (let line of lines) {
             totalChars += Math.ceil(line.length / maxCharsPerLine);
         }
-        
-        if (totalChars > 5) {
+                if (totalChars > 5) {
             this.style.overflowY = 'auto';
         } else {
             this.style.overflowY = 'hidden';
@@ -139,9 +138,7 @@ function initSendLogic() {
         });
     }
     
-   
 }
-
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initSendLogic);
 } else {

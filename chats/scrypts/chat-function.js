@@ -2,14 +2,17 @@ function initChatFunctionality() {
     const chatItems = document.querySelectorAll('.chat-item');
     const chatPlaceholder = document.getElementById('chat-placeholder');
     const activeChatContainer = document.getElementById('active-chat-container');
+    const profileContainer = document.getElementById('profile-container');
     
     let currentOpenChat = null;
     
-    const userAvatar = '/chats/img/image.png'; 
-    const otherAvatar = '/chats/img/image.png'; 
-    
+    const userAvatar = '/chats/img/image.png';    
     chatItems.forEach(chatItem => {
         chatItem.addEventListener('click', function() {
+            if (profileContainer && profileContainer.style.display === 'flex') {
+                profileContainer.style.display = 'none';
+            }
+            
             const chatId = this.getAttribute('data-chat-id');
             const userName = this.getAttribute('data-user-name');
             const userStatus = this.getAttribute('data-user-status');
@@ -19,7 +22,6 @@ function initChatFunctionality() {
                 closeChat();
                 currentOpenChat = null;
             } else {
-
                 openChat(chatId, userName, userStatus, userAvatar, this);
                 currentOpenChat = chatId;
             }
@@ -38,34 +40,35 @@ function initChatFunctionality() {
         activeChatContainer.style.display = 'flex';
         
         updateChatHeader(userName, userStatus, userAvatar);
-        loadChatHistory(chatId);
+        
+        loadChatHistory(chatId, userAvatar);
+        
         const messageInput = document.getElementById('message-input');
         if (messageInput) {
-
             setTimeout(() => {
                 messageInput.focus();
             }, 100);
         }
     }
-
+    
     function closeChat() {
-
+        
         chatItems.forEach(item => {
             item.classList.remove('active');
         });
-
+        
         currentOpenChat = null;
-
+        
         chatPlaceholder.style.display = 'flex';
         activeChatContainer.style.display = 'none';
-
+        
         const messageInput = document.getElementById('message-input');
         if (messageInput) {
             messageInput.value = '';
             messageInput.style.height = 'auto';
         }
     }
-
+    
     function updateChatHeader(userName, userStatus, userAvatar) {
         const userNameElement = document.getElementById('chat-user-name');
         const userStatusElement = document.getElementById('user-status');
@@ -84,41 +87,40 @@ function initChatFunctionality() {
             userAvatarElement.alt = `Аватар ${userName}`;
         }
     }
-
-    function loadChatHistory(chatId) {
+    
+    function loadChatHistory(chatId, otherUserAvatar) {
         const messagesContainer = document.getElementById('messages-container');
         
         if (!messagesContainer) return;
-
+        
         messagesContainer.innerHTML = '';
-
+        
         removeNoMessagesText();
-
+        
         const dateElement = document.createElement('div');
         dateElement.className = 'message-date';
         dateElement.textContent = 'Сегодня';
         messagesContainer.appendChild(dateElement);
-
+        
         const testMessages = generateTestMessages(chatId);
-
+        
         testMessages.forEach(message => {
-            const messageElement = createMessageElement(message.text, message.isOwn, message.time);
+            const messageElement = createMessageElement(message.text, message.isOwn, message.time, otherUserAvatar);
             messagesContainer.appendChild(messageElement);
         });
-
+        
         setTimeout(() => {
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }, 50);
     }
-
+    
     function generateTestMessages(chatId) {
         const messages = [];
-
+        
         const messageSets = {
             1: [
                 { text: 'Привет! Как дела?', isOwn: false, time: '10:15' },
                 { text: 'Привет!', isOwn: true, time: '10:20' },
-               
             ],
             2: [
                 { text: 'Встреча в 18:00 у офиса', isOwn: false, time: '15:30' },
@@ -126,12 +128,11 @@ function initChatFunctionality() {
             ],
             3: [
                 { text: 'Отправил документы на проверку', isOwn: false, time: 'Вчера 14:20' },
-                { text: 'Получил, спасибо! Проверю сегодня', isOwn: true, time: 'Вчера 14:25' },
+                { text: 'Получил, спасибо', isOwn: true, time: 'Вчера 14:25' },
             ],
             4: [
-                { text: 'Спасибо за помощь вчера!', isOwn: false, time: '09:15' },
-                { text: 'Не за что, всегда рад помочь!', isOwn: true, time: '09:20' },
-            
+                { text: 'Спасибо за помощь', isOwn: false, time: '09:15' },
+                { text: 'Не за что, всегда рад помочь', isOwn: true, time: '09:20' },
             ]
         };
         
@@ -140,16 +141,17 @@ function initChatFunctionality() {
             { text: 'Начните общение!', isOwn: true, time: 'Только что' }
         ];
     }
+    
 
-    function createMessageElement(text, isOwn, time) {
+    function createMessageElement(text, isOwn, time, otherUserAvatar) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isOwn ? 'own-message' : 'other-message'}`;
-
+        
         const avatarDiv = document.createElement('div');
         avatarDiv.className = 'message-avatar';
         
         const avatarImg = document.createElement('img');
-        avatarImg.src = isOwn ? userAvatar : otherAvatar;
+        avatarImg.src = isOwn ? userAvatar : otherUserAvatar;
         avatarImg.alt = isOwn ? 'Ваш аватар' : 'Аватар собеседника';
         
         avatarDiv.appendChild(avatarImg);
@@ -157,7 +159,6 @@ function initChatFunctionality() {
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
         
-
         const textContainerDiv = document.createElement('div');
         textContainerDiv.className = 'message-text-container';
         
@@ -174,13 +175,12 @@ function initChatFunctionality() {
         
         contentDiv.appendChild(textContainerDiv);
         
-
         messageDiv.appendChild(avatarDiv);
         messageDiv.appendChild(contentDiv);
         
         return messageDiv;
     }
-   
+    
     function removeNoMessagesText() {
         const messagesContainer = document.getElementById('messages-container');
         if (messagesContainer) {
@@ -189,8 +189,7 @@ function initChatFunctionality() {
                 noMessagesText.remove();
             }
         }
-    }
-    
+    }    
 }
 
 if (document.readyState === 'loading') {
